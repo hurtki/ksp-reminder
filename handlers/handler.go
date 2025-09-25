@@ -14,24 +14,23 @@ type TaskApiHandler struct {
 	storage storage.Storage
 }
 
-func NewTaskApiHandler(logger *slog.Logger, storage storage.Storage) TaskApiHandler {
+func NewTaskApiHandler(logger slog.Logger, storage storage.Storage) TaskApiHandler {
 	return TaskApiHandler{
-		logger:  logger,
+		logger:  logger.With("service", "HTTP-Handler"),
 		storage: storage,
 	}
 }
 
 func (h *TaskApiHandler) ServeGet(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
-	h.logger.Info("GET request")
-	tasks, err := h.storage.GetReminders(ctx)
+	reminders, err := h.storage.GetReminders(ctx)
 	if err != nil {
 		resp.Write([]byte(err.Error()))
-		h.logger.Error(err.Error())
+		h.logger.Error("failed to get reminders", "error", err)
 		return
 	}
-	res, err := json.Marshal(tasks)
+	res, err := json.Marshal(reminders)
 	if err != nil {
-		h.logger.Error(err.Error())
+		h.logger.Error("failed to marshal reminders", "error", err, "reminders", reminders)
 		resp.Write([]byte(err.Error()))
 		return
 	}
@@ -39,25 +38,24 @@ func (h *TaskApiHandler) ServeGet(ctx context.Context, resp http.ResponseWriter,
 }
 
 func (h *TaskApiHandler) ServePost(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
-	h.logger.Info("POST request")
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
+		h.logger.Error("failed to read request body", "error", err)
+		resp.WriteHeader(400)
+		resp.Write([]byte(err.Error()))
+		return
+	}
+
+	reminder := &storage.Reminder{}
+	if err := json.Unmarshal(body, reminder); err != nil {
 		h.logger.Error(err.Error())
 		resp.WriteHeader(400)
 		resp.Write([]byte(err.Error()))
 		return
 	}
 
-	task := &storage.Reminder{}
-	if err := json.Unmarshal(body, task); err != nil {
-		h.logger.Error(err.Error())
-		resp.WriteHeader(400)
-		resp.Write([]byte(err.Error()))
-		return
-	}
-
-	if err := h.storage.AddReminder(ctx, *task); err != nil {
-		h.logger.Error(err.Error())
+	if err := h.storage.AddReminder(ctx, *reminder); err != nil {
+		h.logger.Error("failed to add reminder", "error", err, "reminder", reminder)
 		resp.WriteHeader(400)
 		resp.Write([]byte(err.Error()))
 		return
@@ -66,11 +64,24 @@ func (h *TaskApiHandler) ServePost(ctx context.Context, resp http.ResponseWriter
 }
 
 func (h *TaskApiHandler) ServeMethodNotAllowed(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	h.logger.Error("Incoming request Method NOT ALLOWED",
+		"method", req.Method,
+		"path", req.URL.Path,
+		"remote", req.RemoteAddr,
+	)
 	resp.WriteHeader(405)
 }
 
 func (h TaskApiHandler) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
+
+	// logging request info
+
+	h.logger.Info("incoming request",
+		"method", req.Method,
+		"path", req.URL.Path,
+		"remote", req.RemoteAddr,
+	)
 
 	switch req.Method {
 	case http.MethodGet:

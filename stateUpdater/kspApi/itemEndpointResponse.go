@@ -1,4 +1,7 @@
-package stateUpdaterStructures
+package stateUpdater_kspApi
+
+//  Item endpoint ksp
+// structures represent what ksp api returns
 
 type ItemResultMain struct {
 	Result ItemResult `json:"result"`

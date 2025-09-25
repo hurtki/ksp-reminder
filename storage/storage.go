@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	stateUpdater "ksp-parser/stateUpdater/structures"
+	"log/slog"
 	"os"
 )
 
@@ -14,12 +15,43 @@ type Storage interface {
 }
 
 type FileStorage struct {
-	Path string
+	Path   string
+	logger *slog.Logger
 }
 
+func NewFileStorage(path string, logger slog.Logger) FileStorage {
+	return FileStorage{
+		Path:   path,
+		logger: logger.With("service", "FileStorage"),
+	}
+}
+
+func (s *FileStorage) Init() error {
+	s.logger.Info("Started Initialization of file storage", "path", s.Path)
+	_, err := os.Stat(s.Path)
+	if os.IsNotExist(err) {
+
+		data, _ := json.Marshal([]Reminder{})
+		err = os.WriteFile(s.Path, data, 0644)
+		if err != nil {
+			return err
+		}
+		s.logger.Info("Created new storage file", "path", s.Path)
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	s.logger.Info("File Storage already exists", "path", s.Path)
+	return nil
+}
+
+
 func (s *FileStorage) GetReminders(ctx context.Context) ([]Reminder, error) {
+
 	data, err := os.ReadFile(s.Path)
 	if err != nil {
+		s.logger.Warn("Filepath storage didn't find a storage on path: " + s.Path)
 		data, _ = json.Marshal([]Reminder{})
 	}
 	reminders := []Reminder{}
@@ -33,6 +65,7 @@ func (s *FileStorage) GetReminders(ctx context.Context) ([]Reminder, error) {
 func (s *FileStorage) AddReminder(ctx context.Context, TaskToAdd Reminder) error {
 	data, err := os.ReadFile(s.Path)
 	if err != nil {
+		s.logger.Warn("Filepath storage didn't find a storage on path: " + s.Path)
 		data, _ = json.Marshal([]Reminder{})
 	}
 	reminders := &[]Reminder{}

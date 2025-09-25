@@ -3,8 +3,9 @@ package stateupdater
 import (
 	"context"
 	"fmt"
-	structures "ksp-parser/stateUpdater/structures"
-	"ksp-parser/storage"
+	kspApi "ksp-parser/stateUpdater/kspApi"
+	stateUpdaterStructures "ksp-parser/stateUpdater/structures"
+	storage "ksp-parser/storage"
 	"log/slog"
 	"time"
 )
@@ -12,15 +13,15 @@ import (
 type StateUpdater struct {
 	UpdateInterval time.Duration
 	storage.Storage
-	kspApi *KspApi
+	kspApi *kspApi.KspApi
 	logger *slog.Logger
 }
 
-func NewStateUpdater(storage storage.Storage, logger *slog.Logger) StateUpdater {
+func NewStateUpdater(storage storage.Storage, logger slog.Logger, kspApi *kspApi.KspApi) StateUpdater {
 	return StateUpdater{
 		Storage: storage,
-		kspApi:  NewKspApi(),
-		logger:  logger,
+		kspApi:  kspApi,
+		logger:  logger.With("service", "StateUpdater"),
 	}
 }
 
@@ -47,7 +48,7 @@ func (u *StateUpdater) startUpdating() {
 
 func (u *StateUpdater) updateReminder(reminder storage.Reminder) {
 	branches, err := u.kspApi.GetAvailableBranches(reminder.Article)
-	stateUpdate := structures.StateUpdate{
+	stateUpdate := stateUpdaterStructures.StateUpdate{
 		Time: time.Now(),
 	}
 
