@@ -1,0 +1,291 @@
+
+{
+    "eilat2": {
+        "id": "51",
+        "name": "Eilat Taielet"
+    },
+    "eilatLaguna": {
+        "id": "63",
+        "name": "Eilat Ha`Laguna"
+    },
+    "eilatMerkaz": {
+        "id": "78",
+        "name": "Eilat Tourism Center"
+    },
+    "eilatNorth": {
+        "id": "87",
+        "name": "Eilat North"
+    },
+    "eilat": {
+        "id": "17",
+        "name": "Eilat Tarshish"
+    },
+    "AshdodCity": {
+        "id": "69",
+        "name": "Ashdod City"
+    },
+    "ashdod1": {
+        "id": "19",
+        "name": "Ashdod"
+    },
+    "ashkelon": {
+        "id": "20",
+        "name": "Ashkelon"
+    },
+    "AshkelonBarnea": {
+        "id": "94",
+        "name": "Ashkelon Barnea"
+    },
+    "beershevaGrand": {
+        "id": "98",
+        "name": "Beersheva Grand"
+    },
+    "beershevaEast": {
+        "id": "64",
+        "name": "Beersheva East"
+    },
+    "beersheva": {
+        "id": "21",
+        "name": "Beer Sheva Ramot"
+    },
+    "kspbilu": {
+        "id": "40",
+        "name": "Bilu"
+    },
+    "beitshemesh": {
+        "id": "52",
+        "name": "Beit Shemesh"
+    },
+    "BneiBrak": {
+        "id": "83",
+        "name": "Bnei Brak"
+    },
+    "BatYam": {
+        "id": "86",
+        "name": "Bat Yam"
+    },
+    "HodHasharon": {
+        "id": "85",
+        "name": "Hod Hasharon"
+    },
+    "HerzliyaCenter": {
+        "id": "73",
+        "name": "Herzliya Center"
+    },
+    "herzliya": {
+        "id": "58",
+        "name": "Herzliya Pituah",
+        "qnt": 1
+    },
+    "ksphadera": {
+        "id": "22",
+        "name": "Hadera"
+    },
+    "HaderaMizrach": {
+        "id": "95",
+        "name": "Hadera East - Mix Complex"
+    },
+    "HolonMizrach": {
+        "id": "88",
+        "name": "Holon Mizrach"
+    },
+    "holon": {
+        "id": "23",
+        "name": "Holon Kogal"
+    },
+    "kspbiyalik": {
+        "id": "70",
+        "name": "Hutzot HaMifratz"
+    },
+    "matam": {
+        "id": "55",
+        "name": "Haifa Matam"
+    },
+    "StellaMaris": {
+        "id": "62",
+        "name": "Haifa Stella Maris"
+    },
+    "KSP03": {
+        "id": "24",
+        "name": "Haifa Romema",
+        "qnt": 1
+    },
+    "tverya": {
+        "id": "25",
+        "name": "Tiberias"
+    },
+    "yavne": {
+        "id": "75",
+        "name": "Yavne"
+    },
+    "kspjerusalems": {
+        "id": "27",
+        "name": "Jerusalem Har Hotzvim"
+    },
+    "jeruscenter": {
+        "id": "57",
+        "name": "Jer King George"
+    },
+    "talpiot": {
+        "id": "68",
+        "name": "Jerusalem Talpiot"
+    },
+    "KfarSabaGreen": {
+        "id": "72",
+        "name": "Kfar Saba Green"
+    },
+    "kfarsaba": {
+        "id": "29",
+        "name": "Kfar-Saba"
+    },
+    "karmiel": {
+        "id": "41",
+        "name": "Karmiel"
+    },
+    "Mevaseret": {
+        "id": "91",
+        "name": "Mevaseret"
+    },
+    "Modiin": {
+        "id": "71",
+        "name": "Modiin",
+        "qnt": 1
+    },
+    "kspnaharia": {
+        "id": "30",
+        "name": "Nahariya"
+    },
+    "kspnazarta": {
+        "id": "32",
+        "name": "Nof Hagalil (Nazareth-Illit)"
+    },
+    "NessZiona": {
+        "id": "84",
+        "name": "Ness Ziona"
+    },
+    "nesher": {
+        "id": "31",
+        "name": "Nesher (Check Post)"
+    },
+    "Netivot": {
+        "id": "76",
+        "name": "Netivot",
+        "qnt": 1
+    },
+    "kspnatania": {
+        "id": "33",
+        "name": "Netanya Poleg",
+        "qnt": 1
+    },
+    "NetanyaCenter": {
+        "id": "79",
+        "name": "Netanya a\u2011Sharon Mall",
+        "qnt": 1
+    },
+    "NetKirSharon": {
+        "id": "67",
+        "name": "Netanya Kiryat-Sharon",
+        "qnt": 1
+    },
+    "afula": {
+        "id": "34",
+        "name": "Afula",
+        "qnt": 1
+    },
+    "PardesHanna": {
+        "id": "89",
+        "name": "Pardes Hanna"
+    },
+    "PetahTikva": {
+        "id": "61",
+        "name": "Petah-Tikva Rabin"
+    },
+    "ksppetahtikva": {
+        "id": "35",
+        "name": "Petah-Tikva Sgula"
+    },
+    "keryon": {
+        "id": "60",
+        "name": "Kiryat-Bialik Kiryon"
+    },
+    "kiryatono": {
+        "id": "37",
+        "name": "Kiryat-Ono"
+    },
+    "ShaarHazafon": {
+        "id": "96",
+        "name": "Shaar Hazafon"
+    },
+    "KiryatGat": {
+        "id": "80",
+        "name": "Kiryat Gat"
+    },
+    "khaim": {
+        "id": "38",
+        "name": "Kiryat-Haim"
+    },
+    "RoshHaayin": {
+        "id": "82",
+        "name": "Rosh Haayin"
+    },
+    "RishonCenter": {
+        "id": "66",
+        "name": "Rishon Lezion Center"
+    },
+    "ksprishonlezion": {
+        "id": "43",
+        "name": "Rishon LeZion, Moshe Levi"
+    },
+    "Rothschild": {
+        "id": "92",
+        "name": "Rishon LeZion Rothschild"
+    },
+    "rehovot": {
+        "id": "65",
+        "name": "Rehovot"
+    },
+    "Ramle": {
+        "id": "74",
+        "name": "Ramle"
+    },
+    "kspramatgan": {
+        "id": "45",
+        "name": "Ramat Gan"
+    },
+    "ramathasharon": {
+        "id": "42",
+        "name": "Ramat HaSharon"
+    },
+    "KSPGahash": {
+        "id": "44",
+        "name": "Ra'anana"
+    },
+    "ramataviv": {
+        "id": "39",
+        "name": "Tel Aviv - Tagor Ramat Aviv"
+    },
+    "dizingof": {
+        "id": "47",
+        "name": "Tel-Aviv Dizingof"
+    },
+    "hashmonaim": {
+        "id": "56",
+        "name": "Tel-Aviv HaHashmonaim"
+    },
+    "ksptelaviv": {
+        "id": "46",
+        "name": "Tel-Aviv HaMasger"
+    },
+    "Carlebach": {
+        "id": "93",
+        "name": "Tel-Aviv Tsiklag (Carlebach area)"
+    },
+    "ramatahyal": {
+        "id": "59",
+        "name": "Tel-Aviv Ramat HaHayal"
+    },
+    "TelBaruch": {
+        "id": "81",
+        "name": "Tel Baruch"
+    }
+}
