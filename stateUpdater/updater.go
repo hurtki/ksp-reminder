@@ -65,14 +65,18 @@ func (u *StateUpdater) updateReminder(reminder storage.Reminder) {
 	for branchI := 0; branchI < len(branches); branchI++ {
 		for reminderBranchI := 0; reminderBranchI < len(reminder.Branches); reminderBranchI++ {
 			if branches[branchI].Id == reminder.Branches[reminderBranchI].Id {
+				u.logger.Info("found branch on reminder article: " + fmt.Sprint(reminder.Article))
 				stateUpdate.IsFound = true
 				stateUpdate.BranchFoundOn = branches[branchI]
 			}
 		}
 	}
+	if !stateUpdate.IsFound {
+		u.logger.Info("didn't find any branch on reminder article: " + fmt.Sprint(reminder.Article))
+	} 
 	err = u.Storage.AddUpdateToReminder(context.TODO(), reminder.Article, stateUpdate)
 	if err != nil {
 		u.logger.Error("cannot write update to reminder", "error", err.Error())
 	}
-	u.logger.Info("didn't find any branch on reminder article: " + fmt.Sprint(reminder.Article))
+	
 }
