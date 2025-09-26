@@ -6,17 +6,19 @@ import (
 	stateUpdater "ksp-parser/stateUpdater/structures"
 	"log/slog"
 	"os"
+	"sync"
 )
 
 type Storage interface {
 	GetReminders(ctx context.Context) ([]Reminder, error)
 	AddReminder(ctx context.Context, Task Reminder) error
-	AddUpdateToReminder(ctx context.Context, ArticeId int, update stateUpdater.StateUpdate) error
+	UpdateReminder(ctx context.Context, ArticeId int, update stateUpdater.StateUpdate) error
 }
 
 type FileStorage struct {
 	Path   string
 	logger *slog.Logger
+	mutex sync.Mutex
 }
 
 func NewFileStorage(path string, logger slog.Logger) FileStorage {
@@ -46,9 +48,68 @@ func (s *FileStorage) Init() error {
 	return nil
 }
 
-
 func (s *FileStorage) GetReminders(ctx context.Context) ([]Reminder, error) {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+	return s.readReminders()
+}
 
+func (s *FileStorage) AddReminder(ctx context.Context, ReminderToAdd Reminder) error {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+	reminders, err := s.readReminders()
+	if err != nil {
+		return err
+	}
+	reminders = append(reminders, ReminderToAdd)
+	
+	
+	
+	return s.writeReminders(reminders)
+}
+
+func (s *FileStorage) UpdateReminder(ctx context.Context, articleID int, update stateUpdater.StateUpdate) error {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	reminders, err := s.readReminders()
+
+	if err != nil {
+		return err
+	}
+
+	for i := range reminders {
+		if reminders[i].Article != articleID {
+			continue
+		}
+
+		updates := reminders[i].Updates
+		if len(updates) > 0 {
+			last := &updates[len(updates)-1]
+
+			// if status of update is the same — so updateing only time and BranchFoundOn
+			if last.Error == update.Error && last.IsFound == update.IsFound {
+				last.Time = update.Time
+				last.BranchFoundOn = update.BranchFoundOn
+			} else {
+				updates = append(updates, update)
+			}
+		} else {
+			// if there is no updates just add a new one
+			updates = append(updates, update)
+		}
+		
+		reminders[i].Updates = updates
+
+		return s.writeReminders(reminders)
+	}
+
+	return ErrNotFoundInStorage
+}
+
+// readReminders() is a raw method to read reminders from file 
+// You need to use s.mutex in functions that use this
+func (s *FileStorage) readReminders() ([]Reminder, error) {
 	data, err := os.ReadFile(s.Path)
 	if err != nil {
 		s.logger.Warn("Filepath storage didn't find a storage on path: " + s.Path)
@@ -61,49 +122,12 @@ func (s *FileStorage) GetReminders(ctx context.Context) ([]Reminder, error) {
 	}
 	return reminders, nil
 }
-
-func (s *FileStorage) AddReminder(ctx context.Context, TaskToAdd Reminder) error {
-	data, err := os.ReadFile(s.Path)
-	if err != nil {
-		s.logger.Warn("Filepath storage didn't find a storage on path: " + s.Path)
-		data, _ = json.Marshal([]Reminder{})
-	}
-	reminders := &[]Reminder{}
-	_ = json.Unmarshal(data, reminders)
-	*reminders = append(*reminders, TaskToAdd)
-	updatedData, err := json.Marshal(reminders)
+// readReminders() is a raw method to write reminders to file 
+// You need to use s.mutex in functions that use this
+func (s *FileStorage) writeReminders(reminders []Reminder) error {
+	data, err := json.Marshal(reminders)
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(s.Path, updatedData, 0644)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (s *FileStorage) AddUpdateToReminder(ctx context.Context, ArticeId int, update stateUpdater.StateUpdate) error {
-	data, err := os.ReadFile(s.Path)
-	if err != nil {
-		data, _ = json.Marshal([]Reminder{})
-	}
-	reminders := []Reminder{}
-
-	_ = json.Unmarshal(data, &reminders)
-
-	for i := 0; i < len(reminders); i++ {
-		if reminders[i].Article == ArticeId {
-			reminders[i].Updates = append(reminders[i].Updates, update)
-			updatedData, err := json.Marshal(reminders)
-			if err != nil {
-				return err
-			}
-			err = os.WriteFile(s.Path, updatedData, 0644)
-			if err != nil {
-				return err
-			}
-			return nil
-		}
-	}
-	return ErrNotFoundInStorage
+	return os.WriteFile(s.Path, data, 0644)
 }
