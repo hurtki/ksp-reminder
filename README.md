@@ -8,65 +8,19 @@ Rest service that manages your ksp products to be on the shop branch
 [
   {
     "Article": 298053,
-    "Branches": [
-      {
-        "id": 45,
-        "name": "",
-        "qnt": 0
-      },
-      {
-        "id": 32,
-        "name": "",
-        "qnt": 0
-      }
+    "BranchesIDs": [
+      51,
+      63
     ],
     "Updates": [
       {
-        "Time": "2025-09-25T23:58:41.747146+03:00",
-        "IsFound": true,
-        "BranchFoundOn": {
-          "id": 45,
-          "name": "kspramatgan",
-          "qnt": 1
-        },
-        "Error": ""
-      },
-      {
-        "Time": "2025-09-25T23:58:51.574468+03:00",
-        "IsFound": true,
-        "BranchFoundOn": {
-          "id": 45,
-          "name": "kspramatgan",
-          "qnt": 1
-        },
-        "Error": ""
-      }
-    ]
-  },
-  {
-    "Article": 298043,
-    "Branches": [
-      {
-        "id": 45,
-        "name": "",
-        "qnt": 0
-      },
-      {
-        "id": 32,
-        "name": "",
-        "qnt": 0
-      }
-    ],
-    "Updates": [
-      {
-        "Time": "2025-09-25T23:58:51.739456+03:00",
+        "Time": "2025-09-26T22:20:30.355179+03:00",
         "IsFound": false,
         "BranchFoundOn": {
           "id": 0,
-          "name": "",
-          "qnt": 0
+          "name": ""
         },
-        "Error": ""
+        "Error": "API error: 429 429 Too Many Requests"
       }
     ]
   }
@@ -80,10 +34,7 @@ Rest service that manages your ksp products to be on the shop branch
 ```json
 {
     "Article": 298043,
-    "Branches": [
-        {"id": 45},
-        {"id": 32}
-    ]
+    "Branches": [45, 53, 65]
 }
 ```
 
