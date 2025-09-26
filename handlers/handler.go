@@ -54,7 +54,7 @@ func (h *TaskApiHandler) ServePost(ctx context.Context, resp http.ResponseWriter
 		return
 	}
 
-	if err := h.storage.AddReminder(ctx, *reminder); err != nil {
+	if err := h.storage.AddReminderIfNotExists(ctx, *reminder); err != nil {
 		h.logger.Error("failed to add reminder", "error", err, "reminder", reminder)
 		resp.WriteHeader(400)
 		resp.Write([]byte(err.Error()))

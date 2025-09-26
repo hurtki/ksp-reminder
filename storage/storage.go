@@ -11,7 +11,7 @@ import (
 
 type Storage interface {
 	GetReminders(ctx context.Context) ([]Reminder, error)
-	AddReminder(ctx context.Context, Task Reminder) error
+	AddReminderIfNotExists(ctx context.Context, Task Reminder) error
 	UpdateReminder(ctx context.Context, ArticeId int, update stateUpdater.StateUpdate) error
 }
 
@@ -54,12 +54,18 @@ func (s *FileStorage) GetReminders(ctx context.Context) ([]Reminder, error) {
 	return s.readReminders()
 }
 
-func (s *FileStorage) AddReminder(ctx context.Context, ReminderToAdd Reminder) error {
+func (s *FileStorage) AddReminderIfNotExists(ctx context.Context, ReminderToAdd Reminder) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 	reminders, err := s.readReminders()
 	if err != nil {
 		return err
+	}
+	// checking if Article already exists in storage
+	for _, r := range reminders {
+		if r.Article == ReminderToAdd.Article {
+			return ErrReminderAlreadyExists
+		}
 	}
 	reminders = append(reminders, ReminderToAdd)
 	

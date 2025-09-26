@@ -6,6 +6,6 @@ import (
 
 type Reminder struct {
 	Article  int
-	Branches []stateUpdater.Branch
+	BranchesIDs []int
 	Updates  []stateUpdater.StateUpdate
 }

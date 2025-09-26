@@ -56,7 +56,7 @@ func (u *StateUpdater) updateReminder(reminder storage.Reminder) {
 		Time: time.Now(),
 	}
 
-	branches, err := u.kspApi.GetAvailableBranches(reminder.Article)
+	availableBranches, err := u.kspApi.GetAvailableBranches(reminder.Article)
 
 	// if no ability to get available branches from kspApi
 	// we will send an update that there was an error getting them 
@@ -70,14 +70,18 @@ func (u *StateUpdater) updateReminder(reminder storage.Reminder) {
 		return
 	}
 
-
+	
 	// trying to find the branch, that reminder is looking for
-	for branchI := 0; branchI < len(branches); branchI++ {
-		for reminderBranchI := 0; reminderBranchI < len(reminder.Branches); reminderBranchI++ {
-			if branches[branchI].Id == reminder.Branches[reminderBranchI].Id {
+	for branchI := 0; branchI < len(availableBranches); branchI++ {
+	
+		for reminderBranchI := 0; reminderBranchI < len(reminder.BranchesIDs); reminderBranchI++ {
+
+			if availableBranches[branchI].Id == reminder.BranchesIDs[reminderBranchI] {
+				
 				u.logger.Info("found branch on reminder article: " + fmt.Sprint(reminder.Article))
 				stateUpdate.IsFound = true
-				stateUpdate.BranchFoundOn = branches[branchI]
+				stateUpdate.BranchFoundOn = availableBranches[branchI]
+
 			}
 		}
 	}

@@ -18,20 +18,27 @@ type BranchesInfoResult struct {
 }
 
 type KspApiBranch struct {
-	ID   string `json:"id"`
+	Id  string `json:"id"`
 	Name string `json:"name"`
 	Qnt  int    `json:"qnt"`
 }
 
-func (r *BranchesInfoResult) ToBranches() []stateUpdaterStructures.Branch {
-	branches := make([]stateUpdaterStructures.Branch, 0, len(r.Branches))
+
+func (b *KspApiBranch) ToInternalBranch() stateUpdaterStructures.Branch {
+	id, _ := strconv.Atoi(b.Id)
+	return stateUpdaterStructures.Branch{
+		Id: id,
+		Name: b.Name,
+	}
+}
+
+func (r *BranchesInfoResult) ToBranches() []KspApiBranch {
+	branches := make([]KspApiBranch, 0, len(r.Branches))
 
 	for key, b := range r.Branches {
-		id, _ := strconv.Atoi(b.ID)
-		branches = append(branches, stateUpdaterStructures.Branch{
-			Id:       id,
+		branches = append(branches, KspApiBranch{
+			Id:       b.Id,
 			Name:     key,
-			Quantity: b.Qnt,
 		})
 	}
 

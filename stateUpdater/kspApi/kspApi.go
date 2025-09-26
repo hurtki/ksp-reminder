@@ -69,7 +69,7 @@ func (a *KspApi) GetAvailableBranches(article int) ([]structures.Branch, error) 
 	if err := json.Unmarshal(respBody, &res); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal item response: %w", err)
 	}
-
+	
 	branches, err := a.getBranchesInfo(res.Result.Data.Uinsql)
 	if err != nil {
 		return nil, err
@@ -77,15 +77,15 @@ func (a *KspApi) GetAvailableBranches(article int) ([]structures.Branch, error) 
 
 	var resBranches []structures.Branch
 	for _, b := range branches {
-		if b.Quantity > 0 {
-			resBranches = append(resBranches, b)
+		if b.Qnt > 0 {
+			resBranches = append(resBranches, b.ToInternalBranch())
 		}
 	}
 	return resBranches, nil
 }
 
 // getBranchesInfo получает информацию о филиалах по uinsql.
-func (a *KspApi) getBranchesInfo(uinsql string) ([]structures.Branch, error) {
+func (a *KspApi) getBranchesInfo(uinsql string) ([]KspApiBranch, error) {
 	url := BranchesAvailabilityEndpoint + uinsql
 
 	respBody, err := a.RequestApi("GET", url, nil)
