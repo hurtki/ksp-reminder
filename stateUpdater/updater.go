@@ -35,17 +35,18 @@ func (u *StateUpdater) Run() {
 		}
 	}()
 }
+
 // (u *StateUpdater) startUpdating() is getting reminders from storage and starting up workers, that update those reminders
 func (u *StateUpdater) startUpdating() {
-		reminders, err := u.Storage.GetReminders(context.TODO())
-		if err != nil {
-			u.logger.Error("cannot get reminders from storage", "error", err.Error())
-			return
-		}
-		u.logger.Info("starting gorutines for updating reminders", "count", len(reminders))
-		for i := range reminders {
-			go u.updateReminder(reminders[i])
-		}
+	reminders, err := u.Storage.GetReminders(context.TODO())
+	if err != nil {
+		u.logger.Error("cannot get reminders from storage", "error", err.Error())
+		return
+	}
+	u.logger.Info("starting gorutines for updating reminders", "count", len(reminders))
+	for i := range reminders {
+		go u.updateReminder(reminders[i])
+	}
 }
 
 // (u *StateUpdater)updateReminder() is a method function for (u *StateUpdater) startUpdating()
@@ -59,7 +60,7 @@ func (u *StateUpdater) updateReminder(reminder storage.Reminder) {
 	availableBranches, err := u.kspApi.GetAvailableBranches(reminder.Article)
 
 	// if no ability to get available branches from kspApi
-	// we will send an update that there was an error getting them 
+	// we will send an update that there was an error getting them
 	if err != nil {
 		u.logger.Error("cannot get branches via ksp api", "error", err.Error())
 		stateUpdate.Error = err.Error()
@@ -70,14 +71,13 @@ func (u *StateUpdater) updateReminder(reminder storage.Reminder) {
 		return
 	}
 
-	
 	// trying to find the branch, that reminder is looking for
 	for branchI := 0; branchI < len(availableBranches); branchI++ {
-	
+
 		for reminderBranchI := 0; reminderBranchI < len(reminder.BranchesIDs); reminderBranchI++ {
 
 			if availableBranches[branchI].Id == reminder.BranchesIDs[reminderBranchI] {
-				
+
 				u.logger.Info("found branch on reminder article: " + fmt.Sprint(reminder.Article))
 				stateUpdate.IsFound = true
 				stateUpdate.BranchFoundOn = availableBranches[branchI]

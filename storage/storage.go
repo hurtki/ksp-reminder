@@ -18,7 +18,7 @@ type Storage interface {
 type FileStorage struct {
 	Path   string
 	logger *slog.Logger
-	mutex sync.Mutex
+	mutex  sync.Mutex
 }
 
 func NewFileStorage(path string, logger slog.Logger) FileStorage {
@@ -68,9 +68,7 @@ func (s *FileStorage) AddReminderIfNotExists(ctx context.Context, ReminderToAdd 
 		}
 	}
 	reminders = append(reminders, ReminderToAdd)
-	
-	
-	
+
 	return s.writeReminders(reminders)
 }
 
@@ -104,7 +102,7 @@ func (s *FileStorage) UpdateReminder(ctx context.Context, articleID int, update 
 			// if there is no updates just add a new one
 			updates = append(updates, update)
 		}
-		
+
 		reminders[i].Updates = updates
 
 		return s.writeReminders(reminders)
@@ -113,7 +111,7 @@ func (s *FileStorage) UpdateReminder(ctx context.Context, articleID int, update 
 	return ErrNotFoundInStorage
 }
 
-// readReminders() is a raw method to read reminders from file 
+// readReminders() is a raw method to read reminders from file
 // You need to use s.mutex in functions that use this
 func (s *FileStorage) readReminders() ([]Reminder, error) {
 	data, err := os.ReadFile(s.Path)
@@ -128,7 +126,8 @@ func (s *FileStorage) readReminders() ([]Reminder, error) {
 	}
 	return reminders, nil
 }
-// readReminders() is a raw method to write reminders to file 
+
+// readReminders() is a raw method to write reminders to file
 // You need to use s.mutex in functions that use this
 func (s *FileStorage) writeReminders(reminders []Reminder) error {
 	data, err := json.Marshal(reminders)
